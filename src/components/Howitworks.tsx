@@ -4,66 +4,60 @@ import {
   Calendar,
   CreditCard,
   Key,
-  MapPin,
-  Clock,
-  Shield,
+  ChevronRight,
+  Play,
 } from 'lucide-react';
 
 export default function HowItWorks() {
   const [activeStep, setActiveStep] = useState(0);
+  const [mobileActiveStep, setMobileActiveStep] = useState(0);
 
   const steps = [
     {
-      icon: <Car className="w-8 h-8" />,
+      icon: <Car />,
       title: 'Browse & Select',
       description: 'Choose from our diverse fleet of vehicles',
       details:
         'Filter cars by category, fuel type, and transmission. Get full specs, pricing, and real images.',
       color: 'from-blue-500 to-cyan-500',
+      bgColor: 'bg-blue-50',
+      textColor: 'text-blue-600',
     },
     {
-      icon: <Calendar className="w-8 h-8" />,
+      icon: <Calendar />,
       title: 'Book Your Dates',
       description: 'Pick your rental period and get instant pricing',
       details:
         'Select pickup and return dates. Pricing updates automatically based on your selection.',
       color: 'from-purple-500 to-pink-500',
+      bgColor: 'bg-purple-50',
+      textColor: 'text-purple-600',
     },
     {
-      icon: <CreditCard className="w-8 h-8" />,
+      icon: <CreditCard />,
       title: 'Secure Payment',
       description: 'Pay safely with multiple payment options',
       details:
         'Use mobile money, card, or wallet. Get instant confirmation and digital receipts.',
       color: 'from-green-500 to-emerald-500',
+      bgColor: 'bg-green-50',
+      textColor: 'text-green-600',
     },
     {
-      icon: <Key className="w-8 h-8" />,
+      icon: <Key />,
       title: 'Pick Up & Drive',
       description: 'Collect your car and hit the road',
       details:
         'Arrive with your confirmation, complete inspection, grab the keys, and go.',
       color: 'from-orange-500 to-red-500',
+      bgColor: 'bg-orange-50',
+      textColor: 'text-orange-600',
     },
   ];
 
-  const features = [
-    {
-      icon: <MapPin className="w-6 h-6 text-blue-500" />,
-      title: 'Multiple Locations',
-      description: 'Pick up from convenient locations across the city',
-    },
-    {
-      icon: <Clock className="w-6 h-6 text-green-500" />,
-      title: 'Flexible Duration',
-      description: 'Rent by the hour or day, whatever suits your schedule',
-    },
-    {
-      icon: <Shield className="w-6 h-6 text-purple-500" />,
-      title: 'Fully Insured',
-      description: 'Every vehicle comes with comprehensive insurance cover',
-    },
-  ];
+  const nextStep = () => {
+    setMobileActiveStep((prev) => (prev + 1) % steps.length);
+  };
 
   return (
     <section className="py-20 bg-gradient-to-br from-slate-50 to-blue-50">
@@ -84,13 +78,13 @@ export default function HowItWorks() {
               {steps.map((step, index) => (
                 <div
                   key={index}
-                  className={`text-center transition-transform ${
+                  className={`text-center transition-transform cursor-pointer ${
                     activeStep === index ? 'scale-105' : 'hover:scale-102'
                   }`}
                   onMouseEnter={() => setActiveStep(index)}
                 >
                   <div className={`w-20 h-20 rounded-full bg-gradient-to-br ${step.color} flex items-center justify-center text-white mx-auto mb-4 shadow-lg`}>
-                    {step.icon}
+                    {React.cloneElement(step.icon, { className: 'w-8 h-8' })}
                   </div>
                   <div className="w-8 h-8 rounded-full bg-white border-2 border-gray-300 flex items-center justify-center mx-auto mb-2 text-sm font-bold text-gray-700">
                     {index + 1}
@@ -110,39 +104,112 @@ export default function HowItWorks() {
           </div>
         </div>
 
-        {/* Mobile Steps */}
-        <div className="lg:hidden space-y-8 mb-20">
-          {steps.map((step, index) => (
-            <div key={index} className="flex items-start space-x-4">
-              <div className={`w-12 h-12 rounded-full bg-gradient-to-br ${step.color} flex items-center justify-center text-white`}>
-                {React.cloneElement(step.icon, { className: 'w-6 h-6' })}
-              </div>
-              <div className="flex-1">
-                <div className="flex items-center mb-2">
-                  <span className="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center text-xs font-bold text-gray-700 mr-3">
-                    {index + 1}
-                  </span>
-                  <h3 className="text-lg font-semibold text-gray-900">{step.title}</h3>
+        {/* Mobile Interactive Steps */}
+        <div className="lg:hidden mb-20">
+          {/* Progress Bar */}
+          <div className="flex justify-center mb-8">
+            <div className="flex space-x-2">
+              {steps.map((_, index) => (
+                <div
+                  key={index}
+                  className={`h-3 rounded-full transition-all duration-300 ${
+                    index === mobileActiveStep 
+                      ? 'bg-blue-500 w-8' 
+                      : index < mobileActiveStep 
+                        ? 'bg-green-500 w-3' 
+                        : 'bg-gray-300 w-3'
+                  }`}
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* Current Step Card */}
+          <div className={`${steps[mobileActiveStep].bgColor} rounded-2xl p-6 mb-6 transition-all duration-500 transform`}>
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center">
+                <div className={`w-12 h-12 rounded-full bg-gradient-to-br ${steps[mobileActiveStep].color} flex items-center justify-center text-white mr-4`}>
+                  {React.cloneElement(steps[mobileActiveStep].icon, { className: 'w-6 h-6' })}
                 </div>
-                <p className="text-gray-600">{step.description}</p>
-                <p className="text-sm text-gray-500 mt-1">{step.details}</p>
+                <div>
+                  <div className="flex items-center mb-1">
+                    <span className="text-xs font-bold text-gray-500 mr-2">STEP {mobileActiveStep + 1}</span>
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900">{steps[mobileActiveStep].title}</h3>
+                </div>
               </div>
             </div>
-          ))}
+            
+            <p className="text-gray-700 mb-3 text-lg">{steps[mobileActiveStep].description}</p>
+            <p className="text-gray-600 text-sm mb-6">{steps[mobileActiveStep].details}</p>
+            
+            {/* Action Button */}
+            <div className="flex justify-between items-center">
+              <div className="flex space-x-2">
+                {steps.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setMobileActiveStep(index)}
+                    className={`w-8 h-8 rounded-full text-xs font-bold transition-all ${
+                      index === mobileActiveStep
+                        ? `${steps[index].textColor} bg-white shadow-md`
+                        : 'text-gray-400 hover:text-gray-600'
+                    }`}
+                  >
+                    {index + 1}
+                  </button>
+                ))}
+              </div>
+              
+              <button
+                onClick={nextStep}
+                className={`flex items-center px-4 py-2 rounded-full bg-white ${steps[mobileActiveStep].textColor} font-semibold text-sm shadow-sm hover:shadow-md transition-all`}
+              >
+                {mobileActiveStep === steps.length - 1 ? (
+                  <>
+                    <Play className="w-4 h-4 mr-2" />
+                    Get Started
+                  </>
+                ) : (
+                  <>
+                    Next
+                    <ChevronRight className="w-4 h-4 ml-2" />
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+
+          {/* Mini Step Preview */}
+          <div className="grid grid-cols-4 gap-2">
+            {steps.map((step, index) => (
+              <button
+                key={index}
+                onClick={() => setMobileActiveStep(index)}
+                className={`p-3 rounded-lg text-center transition-all ${
+                  index === mobileActiveStep
+                    ? `${step.bgColor} ${step.textColor} shadow-md`
+                    : index < mobileActiveStep
+                      ? 'bg-green-50 text-green-600'
+                      : 'bg-gray-50 text-gray-400 hover:bg-gray-100'
+                }`}
+              >
+                <div className={`w-8 h-8 rounded-full mx-auto mb-2 flex items-center justify-center ${
+                  index === mobileActiveStep
+                    ? `bg-gradient-to-br ${step.color} text-white`
+                    : index < mobileActiveStep
+                      ? 'bg-green-500 text-white'
+                      : 'bg-gray-300 text-gray-600'
+                }`}>
+                  {React.cloneElement(step.icon, { className: 'w-4 h-4' })}
+                </div>
+                <span className="text-xs font-medium">{step.title.split(' ')[0]}</span>
+              </button>
+            ))}
+          </div>
         </div>
 
-        {/* Feature Highlights */}
-        <div className="grid md:grid-cols-3 gap-8 mb-16">
-          {features.map((feature, index) => (
-            <div key={index} className="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
-              <div className="flex items-center mb-3">
-                {feature.icon}
-                <h4 className="ml-3 text-lg font-semibold text-gray-900">{feature.title}</h4>
-              </div>
-              <p className="text-gray-600">{feature.description}</p>
-            </div>
-          ))}
-        </div>
+
 
         {/* CTA */}
         <div className="text-center bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-8 text-white">
