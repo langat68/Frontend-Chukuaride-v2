@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import  { useState } from 'react';
 import { ChevronDown, ChevronUp, Car, Clock, CreditCard, HelpCircle, MapPin, Shield } from 'lucide-react';
 
 const FAQ = () => {

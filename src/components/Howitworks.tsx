@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Car, Calendar, CreditCard, Key, CheckCircle, MapPin, Clock, Shield } from 'lucide-react';
+import { Car, Calendar, CreditCard, Key,  MapPin, Clock, Shield } from 'lucide-react';
 
 export default function HowItWorks() {
   const [activeStep, setActiveStep] = useState(0);

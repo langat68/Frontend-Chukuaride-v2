@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Fuel, Settings, Users, DollarSign, Filter, Star, Zap, CircleX } from 'lucide-react';
+import { Fuel, Settings, Users, DollarSign, Filter, Star, CircleX } from 'lucide-react';
 
 // Import images at the top
 const carImages = {
