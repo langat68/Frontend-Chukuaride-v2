@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Fuel, Settings, Users, DollarSign, Filter, Star, CircleX } from 'lucide-react';
+import { Fuel, Settings, Users, DollarSign, ChevronDown, Star, CircleX } from 'lucide-react';
 
 // Import images at the top
 const carImages = {
@@ -121,8 +121,6 @@ const Fleet: React.FC = () => {
     category: ''
   });
 
-  const [showFilters, setShowFilters] = useState(false);
-
   const handleFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setFilters({ ...filters, [e.target.name]: e.target.value });
   };
@@ -162,57 +160,30 @@ const Fleet: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
-      {/* Hero Section */}
-      <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 text-white py-16">
-        <div className="max-w-7xl mx-auto px-6 md:px-12 text-center">
-          <h1 className="text-4xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">
-            Premium Fleet Collection
-          </h1>
-          <p className="text-xl md:text-2xl text-blue-100 mb-8">
-            Discover luxury, comfort, and performance in every ride
-          </p>
-          <div className="flex justify-center space-x-8 text-sm md:text-base">
-            <div className="flex items-center space-x-2">
-              <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
-              <span>24/7 Support</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <div className="w-3 h-3 bg-yellow-400 rounded-full animate-pulse"></div>
-              <span>Instant Booking</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <div className="w-3 h-3 bg-blue-400 rounded-full animate-pulse"></div>
-              <span>Best Prices</span>
-            </div>
-          </div>
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-7xl mx-auto px-6 md:px-12 py-8">
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Our Fleet</h1>
+          <p className="text-gray-600">Find the perfect vehicle for your needs</p>
         </div>
-      </div>
 
-      <div className="max-w-7xl mx-auto px-6 md:px-12 py-12">
         {/* Filter Section */}
-        <div className="bg-white rounded-2xl shadow-xl p-6 mb-12 border border-gray-100">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center space-x-2">
-              <Filter className="text-blue-600" />
-              <h2 className="text-xl font-semibold text-gray-800">Filter Your Perfect Car</h2>
-            </div>
-            <button
-              onClick={() => setShowFilters(!showFilters)}
-              className="lg:hidden bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
-            >
-              {showFilters ? 'Hide Filters' : 'Show Filters'}
-            </button>
+        <div className="bg-white rounded-xl shadow-sm p-4 md:p-6 mb-8 border border-gray-200">
+          <div className="flex items-center space-x-2 mb-4">
+            <ChevronDown className="text-blue-600 w-5 h-5" />
+            <h2 className="text-lg font-semibold text-gray-800">Find Your Car</h2>
           </div>
 
-          <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 ${showFilters ? 'block' : 'hidden lg:grid'}`}>
+          {/* Desktop Grid */}
+          <div className="hidden lg:grid grid-cols-5 gap-4">
             <select
               name="category"
               value={filters.category}
               onChange={handleFilterChange}
-              className="px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white"
+              className="px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-sm"
             >
-              <option value="">All Categories</option>
+              <option value="">All Car Types</option>
               <option value="Economy">Economy</option>
               <option value="Luxury">Luxury</option>
               <option value="SUV">SUV</option>
@@ -223,7 +194,7 @@ const Fleet: React.FC = () => {
               name="fuel"
               value={filters.fuel}
               onChange={handleFilterChange}
-              className="px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white"
+              className="px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-sm"
             >
               <option value="">Fuel Type</option>
               <option value="Petrol">Petrol</option>
@@ -236,7 +207,7 @@ const Fleet: React.FC = () => {
               name="transmission"
               value={filters.transmission}
               onChange={handleFilterChange}
-              className="px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white"
+              className="px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-sm"
             >
               <option value="">Transmission</option>
               <option value="Automatic">Automatic</option>
@@ -247,9 +218,9 @@ const Fleet: React.FC = () => {
               name="capacity"
               value={filters.capacity}
               onChange={handleFilterChange}
-              className="px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white"
+              className="px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-sm"
             >
-              <option value="">Capacity</option>
+              <option value="">Number of Seats</option>
               <option value="2">2 Seats</option>
               <option value="4">4 Seats</option>
               <option value="5">5 Seats</option>
@@ -258,52 +229,124 @@ const Fleet: React.FC = () => {
 
             <button
               onClick={clearFilters}
-              className="px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl transition-colors font-medium"
+              className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors text-sm font-medium"
             >
               Clear All
             </button>
           </div>
+
+          {/* Mobile Horizontal Scroll */}
+          <div className="lg:hidden">
+            <div className="flex space-x-3 overflow-x-auto pb-2 scrollbar-hide snap-x snap-mandatory">
+              <div className="flex-shrink-0 snap-start">
+                <select
+                  name="category"
+                  value={filters.category}
+                  onChange={handleFilterChange}
+                  className="w-32 px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-sm"
+                >
+                  <option value="">Car Type</option>
+                  <option value="Economy">Economy</option>
+                  <option value="Luxury">Luxury</option>
+                  <option value="SUV">SUV</option>
+                  <option value="Electric">Electric</option>
+                </select>
+              </div>
+
+              <div className="flex-shrink-0 snap-start">
+                <select
+                  name="fuel"
+                  value={filters.fuel}
+                  onChange={handleFilterChange}
+                  className="w-28 px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-sm"
+                >
+                  <option value="">Fuel</option>
+                  <option value="Petrol">Petrol</option>
+                  <option value="Diesel">Diesel</option>
+                  <option value="Electric">Electric</option>
+                  <option value="Hybrid">Hybrid</option>
+                </select>
+              </div>
+
+              <div className="flex-shrink-0 snap-start">
+                <select
+                  name="transmission"
+                  value={filters.transmission}
+                  onChange={handleFilterChange}
+                  className="w-32 px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-sm"
+                >
+                  <option value="">Gearbox</option>
+                  <option value="Automatic">Automatic</option>
+                  <option value="Manual">Manual</option>
+                </select>
+              </div>
+
+              <div className="flex-shrink-0 snap-start">
+                <select
+                  name="capacity"
+                  value={filters.capacity}
+                  onChange={handleFilterChange}
+                  className="w-28 px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-sm"
+                >
+                  <option value="">Seats</option>
+                  <option value="2">2 Seats</option>
+                  <option value="4">4 Seats</option>
+                  <option value="5">5 Seats</option>
+                  <option value="7">7 Seats</option>
+                </select>
+              </div>
+
+              <div className="flex-shrink-0 snap-start">
+                <button
+                  onClick={clearFilters}
+                  className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors text-sm font-medium whitespace-nowrap"
+                >
+                  Clear All
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Results Count */}
-        <div className="mb-8">
-          <p className="text-gray-600 text-lg">
-            Showing <span className="font-semibold text-blue-600">{filteredCars.length}</span> of <span className="font-semibold">{dummyCars.length}</span> vehicles
+        <div className="mb-6">
+          <p className="text-gray-600">
+            <span className="font-semibold text-gray-900">{filteredCars.length}</span> of {dummyCars.length} vehicles
           </p>
         </div>
 
         {/* Car Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
           {filteredCars.map((car) => (
             <div
               key={car.id}
-              className="group bg-white rounded-2xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 border border-gray-100"
+              className="bg-white rounded-xl shadow-sm overflow-hidden transition-all duration-200 hover:shadow-md border border-gray-200"
             >
-              <div className="relative overflow-hidden">
+              <div className="relative">
                 <img
                   src={car.image}
                   alt={`${car.make} ${car.model}`}
-                  className="w-full h-56 object-cover transition-transform duration-300 group-hover:scale-110"
+                  className="w-full h-48 object-cover"
                 />
-                <div className="absolute top-4 left-4">
-                  <span className="bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-medium">
+                <div className="absolute top-3 left-3">
+                  <span className="bg-blue-600 text-white px-2 py-1 rounded-md text-xs font-medium">
                     {car.category}
                   </span>
                 </div>
-                <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm rounded-full px-3 py-1">
+                <div className="absolute top-3 right-3 bg-white/95 backdrop-blur-sm rounded-md px-2 py-1">
                   <div className="flex items-center space-x-1">
                     {renderStars(car.rating)}
-                    <span className="text-sm font-medium text-gray-700 ml-1">{car.rating}</span>
+                    <span className="text-xs font-medium text-gray-700 ml-1">{car.rating}</span>
                   </div>
                 </div>
               </div>
               
-              <div className="p-6">
-                <div className="mb-4">
-                  <h3 className="text-xl font-bold text-gray-800 mb-1">
+              <div className="p-5">
+                <div className="mb-3">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-1">
                     {car.make} {car.model}
                   </h3>
-                  <p className="text-gray-500 text-sm">{car.year} Model</p>
+                  <p className="text-gray-500 text-sm">{car.year}</p>
                 </div>
 
                 <div className="grid grid-cols-2 gap-3 mb-4 text-sm">
@@ -326,11 +369,11 @@ const Fleet: React.FC = () => {
                 </div>
 
                 <div className="mb-4">
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-1">
                     {car.features.map((feature, index) => (
                       <span
                         key={index}
-                        className="bg-blue-50 text-blue-700 px-2 py-1 rounded-lg text-xs font-medium"
+                        className="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs"
                       >
                         {feature}
                       </span>
@@ -338,7 +381,7 @@ const Fleet: React.FC = () => {
                   </div>
                 </div>
 
-                <button className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white py-3 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
+                <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2.5 rounded-lg font-medium transition-colors">
                   Book Now - ${car.pricePerDay}/day
                 </button>
               </div>
@@ -347,15 +390,15 @@ const Fleet: React.FC = () => {
         </div>
 
         {filteredCars.length === 0 && (
-          <div className="text-center py-16">
+          <div className="text-center py-12">
             <div className="flex justify-center mb-4">
-              <CircleX className="w-16 h-16 text-gray-400" />
+              <CircleX className="w-12 h-12 text-gray-400" />
             </div>
-            <h3 className="text-2xl font-semibold text-gray-800 mb-2">No vehicles found</h3>
-            <p className="text-gray-600 mb-6">Try adjusting your filters to see more options</p>
+            <h3 className="text-xl font-semibold text-gray-800 mb-2">No vehicles found</h3>
+            <p className="text-gray-600 mb-4">Try adjusting your filters to see more options</p>
             <button
               onClick={clearFilters}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-semibold transition-colors"
+              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
             >
               Clear All Filters
             </button>
