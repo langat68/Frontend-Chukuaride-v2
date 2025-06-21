@@ -133,8 +133,56 @@ const Navbar: React.FC = () => {
               </div>
             </div>
 
-            {/* Mobile Menu Button */}
-            <div className="lg:hidden">
+            {/* Mobile Right Section - User Icon + Menu Button */}
+            <div className="lg:hidden flex items-center space-x-3">
+              {/* Mobile User Menu Button */}
+              <div className="relative">
+                <button
+                  onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                  className="p-2 bg-gradient-to-r from-lime-500 to-emerald-600 text-white rounded-lg hover:from-lime-600 hover:to-emerald-700 transition-all duration-200 shadow-md"
+                >
+                  <User className="w-5 h-5" />
+                </button>
+
+                {/* Mobile User Dropdown */}
+                {isUserMenuOpen && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden z-50">
+                    <div className="py-2">
+                      <a 
+                        href="#signin" 
+                        className="block px-4 py-3 text-sm text-gray-700 hover:bg-lime-50 hover:text-lime-600 transition-colors duration-200"
+                        onClick={() => setIsUserMenuOpen(false)}
+                      >
+                        Sign In
+                      </a>
+                      <a 
+                        href="#signup" 
+                        className="block px-4 py-3 text-sm text-gray-700 hover:bg-lime-50 hover:text-lime-600 transition-colors duration-200"
+                        onClick={() => setIsUserMenuOpen(false)}
+                      >
+                        Create Account
+                      </a>
+                      <div className="border-t border-gray-100 my-1"></div>
+                      <a 
+                        href="#dashboard" 
+                        className="block px-4 py-3 text-sm text-gray-700 hover:bg-lime-50 hover:text-lime-600 transition-colors duration-200"
+                        onClick={() => setIsUserMenuOpen(false)}
+                      >
+                        My Bookings
+                      </a>
+                      <a 
+                        href="#profile" 
+                        className="block px-4 py-3 text-sm text-gray-700 hover:bg-lime-50 hover:text-lime-600 transition-colors duration-200"
+                        onClick={() => setIsUserMenuOpen(false)}
+                      >
+                        Profile Settings
+                      </a>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Mobile Menu Button */}
               <button
                 onClick={() => setIsOpen(!isOpen)}
                 className="p-2 text-gray-700 hover:text-lime-600 focus:outline-none"
@@ -188,16 +236,6 @@ const Navbar: React.FC = () => {
                   <MapPin className="w-5 h-5" />
                   <span>Nairobi, Kenya</span>
                 </div>
-              </div>
-
-              {/* Mobile User Actions */}
-              <div className="border-t border-gray-200 pt-4 space-y-3">
-                <button className="w-full bg-gradient-to-r from-lime-500 to-emerald-600 text-white py-3 rounded-lg font-medium hover:from-lime-600 hover:to-emerald-700 transition-all duration-200">
-                  Sign In
-                </button>
-                <button className="w-full border border-gray-300 text-gray-700 py-3 rounded-lg font-medium hover:border-lime-500 hover:text-lime-600 transition-all duration-200">
-                  Create Account
-                </button>
               </div>
             </div>
           </div>
