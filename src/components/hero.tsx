@@ -1,10 +1,10 @@
 // Image imports at the top
-import heroImage1 from '../assets/images/hero1.jpg';
-import heroImage2 from '../assets/images/hero.jpg';
-import heroImage3 from '../assets/images/hero2.jpg';
+import heroImage1 from '../assets/images/hero.jpg';
+import heroImage2 from '../assets/images/hero2.jpg';
+import heroImage3 from '../assets/images/hero1.jpg';
 
 import  { useState, useEffect } from 'react';
-import { ArrowRight,  Clock, Shield,  ChevronDown, Car, Zap } from 'lucide-react';
+import { ArrowRight, Clock, Shield,  ChevronDown, Zap } from 'lucide-react';
 
 const Hero = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -76,7 +76,6 @@ const Hero = () => {
               
               {/* Button content */}
               <span className="relative flex items-center justify-center">
-                <Car className="mr-3 w-6 h-6 group-hover:rotate-12 transition-transform duration-300" />
                 Book Your Ride
                 <ArrowRight className="ml-3 w-6 h-6 group-hover:translate-x-2 transition-transform duration-300" />
               </span>
