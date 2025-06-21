@@ -1,174 +1,158 @@
+// Image imports at the top
+import heroImage1 from '../assets/images/hero1.jpg';
+import heroImage2 from '../assets/images/hero.jpg';
+import heroImage3 from '../assets/images/hero2.jpg';
+
 import React, { useState, useEffect } from 'react';
-import { ArrowRight, MapPin, Clock, Shield, Star, Calendar, Users } from 'lucide-react';
+import { ArrowRight, MapPin, Clock, Shield, Star, Calendar, Users, Play, ChevronDown, Car, Zap } from 'lucide-react';
 
-// Import your images here
-import heroImage1 from '../assets/images/hero.jpg';
-import heroImage2 from '../assets/images/Hero1.jpg';
-import heroImage3 from '../assets/images/hero3.jpg';
-
-const Hero: React.FC = () => {
+const Hero = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
 
+  // Use imported images instead of URLs
   const heroImages = [
     heroImage1,
     heroImage2,
     heroImage3
   ];
 
-  const stats = [
-    { icon: <MapPin className="w-6 h-6" />, value: "50+", label: "Locations" },
-    { icon: <Users className="w-6 h-6" />, value: "10K+", label: "Customers" },
-    { icon: <Shield className="w-6 h-6" />, value: "100%", label: "Insured" },
-    { icon: <Star className="w-6 h-6" />, value: "4.9", label: "Rating" }
-  ];
+
 
   useEffect(() => {
     setIsVisible(true);
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % heroImages.length);
-    }, 6000);
+    }, 5000);
     return () => clearInterval(interval);
   }, []);
 
   return (
-    <section className="relative w-full min-h-screen bg-white overflow-hidden">
-      {/* Subtle Grid Pattern */}
-      <div className="absolute inset-0 opacity-5">
-        <div className="w-full h-full" style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
-        }}></div>
+    <section className="relative min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 overflow-hidden">
+      
+      {/* Subtle Background Elements */}
+      <div className="absolute inset-0">
+        <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-gray-200/30 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-gray-300/20 rounded-full blur-3xl animate-pulse"></div>
+        <div 
+          className="absolute inset-0 opacity-20"
+          style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23e5e7eb' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
+          }}
+        ></div>
       </div>
 
-      <div className="relative max-w-7xl mx-auto px-6 lg:px-8 py-16 lg:py-24">
-        <div className="grid lg:grid-cols-2 gap-16 lg:gap-20 items-center">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16">
+        
+        {/* Header Content */}
+        <div className={`text-center max-w-4xl mx-auto mb-12 transform transition-all duration-1000 ${
+          isVisible ? 'translate-y-0 opacity-100' : 'translate-y-12 opacity-0'
+        }`}>
+          
+          {/* Trust Badge */}
+          <div className="inline-flex items-center bg-gray-900/90 backdrop-blur-sm border border-gray-300 text-white px-4 py-2 rounded-full text-sm font-medium mb-6">
+            <Shield className="w-4 h-4 mr-2 text-blue-400" />
+            Kenya's #1 Car Rental Service
+          </div>
 
-          {/* Content */}
-          <div className={`space-y-8 transform transition-all duration-800 ${
-            isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
-          }`}>
-            
-            {/* Trust Badge */}
-            <div className="inline-flex items-center bg-slate-50 border border-slate-200 text-slate-700 px-4 py-2 rounded-lg text-sm font-medium">
-              <Shield className="w-4 h-4 mr-2 text-blue-600" />
-              Trusted by businesses worldwide
-            </div>
+          {/* Main Headline */}
+          <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold text-gray-900 mb-6 leading-tight">
+            Drive Your
+            <span className="block bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              Dreams Today
+            </span>
+          </h1>
 
-            {/* Headline */}
-            <div className="space-y-4">
-              <h1 className="text-4xl lg:text-6xl font-bold text-slate-900 leading-tight">
-                Premium Vehicle
-                <span className="block text-blue-600">Rental Solutions</span>
-              </h1>
-              <div className="w-16 h-1 bg-blue-600"></div>
-            </div>
+          <p className="text-lg sm:text-xl text-gray-600 mb-8 max-w-2xl mx-auto leading-relaxed">
+            Premium car rentals across Kenya. From city drives to safari adventures, 
+            we've got the perfect ride for every journey.
+          </p>
 
-            {/* Description */}
-            <p className="text-lg lg:text-xl text-slate-600 leading-relaxed max-w-lg">
-              Professional car rental services for corporate clients, business travelers, 
-              and discerning individuals. Reliable, efficient, and always available.
-            </p>
-
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4">
-              <button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg font-semibold transition-colors duration-200 flex items-center justify-center group">
-                Reserve Now
-                <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </button>
+          {/* Creative Book Now Button */}
+          <div className="flex justify-center mb-8">
+            <button className="group relative overflow-hidden bg-gradient-to-r from-blue-600 via-purple-600 to-blue-700 hover:from-blue-700 hover:via-purple-700 hover:to-blue-800 text-white px-12 py-5 rounded-2xl font-bold text-xl transition-all duration-500 transform hover:scale-110 shadow-2xl hover:shadow-purple-500/25 border-2 border-transparent hover:border-white/20">
+              {/* Animated background sparkle effect */}
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
               
-              <button className="border border-slate-300 hover:border-slate-400 text-slate-700 px-8 py-4 rounded-lg font-semibold transition-colors duration-200 flex items-center justify-center">
-                <Calendar className="mr-2 w-5 h-5" />
-                View Fleet
-              </button>
-            </div>
+              {/* Button content */}
+              <span className="relative flex items-center justify-center">
+                <Car className="mr-3 w-6 h-6 group-hover:rotate-12 transition-transform duration-300" />
+                Book Your Ride
+                <ArrowRight className="ml-3 w-6 h-6 group-hover:translate-x-2 transition-transform duration-300" />
+              </span>
+              
+              {/* Pulse effect on hover */}
+              <div className="absolute inset-0 rounded-2xl bg-white/10 opacity-0 group-hover:opacity-100 group-hover:animate-ping transition-opacity duration-300"></div>
+            </button>
+          </div>
+        </div>
 
-            {/* Stats */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 pt-8 border-t border-slate-200">
-              {stats.map((stat, index) => (
-                <div key={index} className={`text-center lg:text-left transform transition-all duration-600 delay-${index * 100} ${
-                  isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
-                }`}>
-                  <div className="flex items-center justify-center lg:justify-start mb-2 text-blue-600">
-                    {stat.icon}
-                  </div>
-                  <div className="text-2xl font-bold text-slate-900">{stat.value}</div>
-                  <div className="text-sm text-slate-600 font-medium">{stat.label}</div>
-                </div>
+        {/* Image Carousel - Enlarged and Repositioned */}
+        <div className={`relative max-w-6xl mx-auto mb-8 transform transition-all duration-1000 ${
+          isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
+        }`} style={{ transitionDelay: '300ms' }}>
+          <div className="relative h-80 sm:h-96 lg:h-[500px] rounded-2xl overflow-hidden shadow-2xl border border-gray-200">
+            {heroImages.map((image, index) => (
+              <div
+                key={index}
+                className={`absolute inset-0 transition-all duration-1000 ${
+                  index === currentSlide ? 'opacity-100 scale-100' : 'opacity-0 scale-110'
+                }`}
+              >
+                <img
+                  src={image}
+                  alt={`Premium vehicle ${index + 1}`}
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent"></div>
+              </div>
+            ))}
+
+            {/* Slide Indicators */}
+            <div className="absolute top-4 right-4 flex space-x-2">
+              {heroImages.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentSlide(index)}
+                  className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                    index === currentSlide 
+                      ? 'bg-white w-6' 
+                      : 'bg-white/60 hover:bg-white/80'
+                  }`}
+                />
               ))}
             </div>
           </div>
+        </div>
 
-          {/* Image Section */}
-          <div className={`relative transform transition-all duration-800 delay-200 ${
-            isVisible ? 'translate-x-0 opacity-100' : 'translate-x-8 opacity-0'
-          }`}>
-            <div className="relative">
-              
-              {/* Main Image Container */}
-              <div className="relative w-full h-[500px] lg:h-[600px] rounded-2xl overflow-hidden shadow-2xl">
-                {heroImages.map((image, index) => (
-                  <div
-                    key={index}
-                    className={`absolute inset-0 transition-opacity duration-1000 ${
-                      index === currentSlide ? 'opacity-100' : 'opacity-0'
-                    }`}
-                  >
-                    <img
-                      src={image}
-                      alt={`Professional vehicle ${index + 1}`}
-                      className="w-full h-full object-cover"
-                    />
-                    
-                    {/* Subtle Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-900/20 via-transparent to-transparent"></div>
-                  </div>
-                ))}
-
-                {/* Quality Badge */}
-                <div className="absolute top-6 left-6 bg-white/95 backdrop-blur-sm text-slate-900 px-4 py-2 rounded-lg font-semibold shadow-lg">
-                  Premium Fleet
-                </div>
-
-                {/* Slide Indicators */}
-                <div className="absolute bottom-6 left-6 flex space-x-2">
-                  {heroImages.map((_, index) => (
-                    <button
-                      key={index}
-                      onClick={() => setCurrentSlide(index)}
-                      className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                        index === currentSlide 
-                          ? 'bg-white w-8' 
-                          : 'bg-white/60 hover:bg-white/80'
-                      }`}
-                    />
-                  ))}
-                </div>
-              </div>
-
-              {/* Service Card */}
-              <div className="absolute -bottom-8 -left-8 bg-white p-6 rounded-xl shadow-xl border border-slate-100 max-w-xs">
-                <div className="flex items-start space-x-4">
-                  <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <Clock className="w-6 h-6 text-blue-600" />
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-slate-900 mb-1">24/7 Service</h4>
-                    <p className="text-sm text-slate-600">Round-the-clock support and assistance</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Background Element */}
-              <div className="absolute -top-4 -right-4 w-32 h-32 bg-blue-50 rounded-full -z-10"></div>
-              <div className="absolute -bottom-8 -right-8 w-24 h-24 bg-slate-50 rounded-full -z-10"></div>
-            </div>
+        {/* Feature Highlights - Enhanced for White Background */}
+        <div className={`grid grid-cols-1 md:grid-cols-3 gap-6 mt-12 transform transition-all duration-1000 ${
+          isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
+        }`} style={{ transitionDelay: '700ms' }}>
+          <div className="bg-white/80 backdrop-blur-sm rounded-xl p-6 border border-gray-200 text-center hover:bg-white transition-all duration-300 shadow-lg hover:shadow-xl">
+            <Clock className="w-8 h-8 text-blue-500 mx-auto mb-4" />
+            <h4 className="text-gray-900 font-bold mb-2">24/7 Support</h4>
+            <p className="text-gray-600 text-sm">Round-the-clock assistance wherever you go</p>
           </div>
+          
+          <div className="bg-white/80 backdrop-blur-sm rounded-xl p-6 border border-gray-200 text-center hover:bg-white transition-all duration-300 shadow-lg hover:shadow-xl">
+            <Shield className="w-8 h-8 text-green-500 mx-auto mb-4" />
+            <h4 className="text-gray-900 font-bold mb-2">Fully Insured</h4>
+            <p className="text-gray-600 text-sm">Comprehensive coverage for peace of mind</p>
+          </div>
+          
+          <div className="bg-white/80 backdrop-blur-sm rounded-xl p-6 border border-gray-200 text-center hover:bg-white transition-all duration-300 shadow-lg hover:shadow-xl">
+            <Zap className="w-8 h-8 text-yellow-500 mx-auto mb-4" />
+            <h4 className="text-gray-900 font-bold mb-2">Instant Booking</h4>
+            <p className="text-gray-600 text-sm">Reserve your car in under 2 minutes</p>
+          </div>
+        </div>
 
+        {/* Scroll Indicator */}
+        <div className="text-center mt-16">
+          <ChevronDown className="w-6 h-6 text-gray-400 mx-auto animate-bounce" />
         </div>
       </div>
-
-      {/* Bottom Section Divider */}
-      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent"></div>
     </section>
   );
 };
