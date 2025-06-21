@@ -3,8 +3,8 @@ import heroImage1 from '../assets/images/hero1.jpg';
 import heroImage2 from '../assets/images/hero.jpg';
 import heroImage3 from '../assets/images/hero2.jpg';
 
-import React, { useState, useEffect } from 'react';
-import { ArrowRight, MapPin, Clock, Shield, Star, Calendar, Users, Play, ChevronDown, Car, Zap } from 'lucide-react';
+import  { useState, useEffect } from 'react';
+import { ArrowRight,  Clock, Shield,  ChevronDown, Car, Zap } from 'lucide-react';
 
 const Hero = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
