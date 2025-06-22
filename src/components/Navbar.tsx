@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { User, Menu, X, Car, Phone, MapPin, ChevronDown } from 'lucide-react';
+import AuthModal from './AuthModal';
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [user, setUser] = useState<null | { name: string; email: string }>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -14,31 +17,56 @@ const Navbar: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) return;
+
+    fetch('/api/auth/me', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => res.ok && res.json())
+      .then((data) => {
+        if (data && data.email && data.name) {
+          setUser({ name: data.name, email: data.email });
+        }
+      })
+      .catch(() => {
+        localStorage.removeItem('token');
+        setUser(null);
+      });
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    setUser(null);
+    setIsUserMenuOpen(false);
+    window.location.reload();
+  };
+
   const navItems = [
     { name: 'Home', href: '#home' },
     { name: 'Fleet', href: '#fleet', hasSubmenu: true },
     { name: 'How It Works', href: '#how-it-works' },
     { name: 'Pricing', href: '#pricing' },
-    { name: 'Contact', href: '#contact' }
+    { name: 'Contact', href: '#contact' },
   ];
 
   const fleetCategories = [
     { name: 'Economy Cars', icon: <Car className="w-4 h-4" /> },
     { name: 'Luxury Vehicles', icon: <Car className="w-4 h-4" /> },
     { name: 'SUVs & Trucks', icon: <Car className="w-4 h-4" /> },
-    { name: 'Electric Cars', icon: <Car className="w-4 h-4" /> }
+    { name: 'Electric Cars', icon: <Car className="w-4 h-4" /> },
   ];
 
   return (
     <>
       <header className={`w-full fixed top-0 left-0 z-50 transition-all duration-300 ${
-        isScrolled 
-          ? 'bg-white/95 backdrop-blur-md shadow-lg border-b border-gray-100' 
-          : 'bg-white/80 backdrop-blur-sm'
+        isScrolled ? 'bg-white/95 backdrop-blur-md shadow-lg border-b border-gray-100' : 'bg-white/80 backdrop-blur-sm'
       }`}>
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 lg:h-20">
-            
             {/* Logo */}
             <div className="flex items-center space-x-3">
               <div className="w-10 h-10 bg-gradient-to-br from-lime-500 to-emerald-600 rounded-xl flex items-center justify-center">
@@ -49,20 +77,15 @@ const Navbar: React.FC = () => {
               </div>
             </div>
 
-            {/* Desktop Navigation */}
+            {/* Desktop Nav */}
             <div className="hidden lg:flex items-center space-x-8">
               {navItems.map((item, index) => (
                 <div key={index} className="relative group">
-                  <a
-                    href={item.href}
-                    className="flex items-center px-3 py-2 text-gray-700 hover:text-lime-600 font-medium transition-colors duration-200 relative"
-                  >
+                  <a href={item.href} className="flex items-center px-3 py-2 text-gray-700 hover:text-lime-600 font-medium transition-colors duration-200 relative">
                     {item.name}
                     {item.hasSubmenu && <ChevronDown className="ml-1 w-4 h-4" />}
                     <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-lime-500 to-emerald-600 transition-all duration-300 group-hover:w-full"></span>
                   </a>
-                  
-                  {/* Fleet Submenu */}
                   {item.hasSubmenu && (
                     <div className="absolute top-full left-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
                       <div className="py-2">
@@ -70,7 +93,7 @@ const Navbar: React.FC = () => {
                           <a
                             key={idx}
                             href={`#fleet-${category.name.toLowerCase().replace(/\s+/g, '-')}`}
-                            className="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-lime-50 hover:text-lime-600 transition-colors duration-200"
+                            className="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-lime-50 hover:text-lime-600"
                           >
                             {category.icon}
                             <span className="ml-3">{category.name}</span>
@@ -83,117 +106,97 @@ const Navbar: React.FC = () => {
               ))}
             </div>
 
-            {/* Contact Info & CTA */}
+            {/* Contact Info & Account */}
             <div className="hidden lg:flex items-center space-x-6">
-              {/* Phone */}
               <div className="flex items-center space-x-2 text-gray-600">
                 <Phone className="w-4 h-4" />
                 <span className="text-sm font-medium">+254 700 123 456</span>
               </div>
-
-              {/* Location */}
               <div className="flex items-center space-x-2 text-gray-600">
                 <MapPin className="w-4 h-4" />
                 <span className="text-sm font-medium">Nairobi</span>
               </div>
 
-              {/* User Menu */}
               <div className="relative">
                 <button
                   onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                  className="flex items-center space-x-2 bg-gradient-to-r from-lime-500 to-emerald-600 text-white px-4 py-2 rounded-lg hover:from-lime-600 hover:to-emerald-700 transition-all duration-200 shadow-md hover:shadow-lg"
+                  className="flex items-center space-x-2 bg-gradient-to-r from-lime-500 to-emerald-600 text-white px-4 py-2 rounded-lg hover:from-lime-600 hover:to-emerald-700 shadow-md"
                 >
                   <User className="w-4 h-4" />
-                  <span className="font-medium">Account</span>
-                  <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${
-                    isUserMenuOpen ? 'rotate-180' : ''
-                  }`} />
+                  <span className="font-medium">
+                    {user ? user.name : 'Account'}
+                  </span>
+                  <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${isUserMenuOpen ? 'rotate-180' : ''}`} />
                 </button>
 
-                {/* User Dropdown */}
                 {isUserMenuOpen && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
+                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100">
                     <div className="py-2">
-                      <a href="#signin" className="block px-4 py-3 text-sm text-gray-700 hover:bg-lime-50 hover:text-lime-600 transition-colors duration-200">
-                        Sign In
-                      </a>
-                      <a href="#signup" className="block px-4 py-3 text-sm text-gray-700 hover:bg-lime-50 hover:text-lime-600 transition-colors duration-200">
-                        Create Account
-                      </a>
-                      <div className="border-t border-gray-100 my-1"></div>
-                      <a href="#dashboard" className="block px-4 py-3 text-sm text-gray-700 hover:bg-lime-50 hover:text-lime-600 transition-colors duration-200">
-                        My Bookings
-                      </a>
-                      <a href="#profile" className="block px-4 py-3 text-sm text-gray-700 hover:bg-lime-50 hover:text-lime-600 transition-colors duration-200">
-                        Profile Settings
-                      </a>
+                      {user ? (
+                        <>
+                          <a href="#dashboard" className="block px-4 py-3 text-sm text-gray-700 hover:bg-lime-50 hover:text-lime-600">My Bookings</a>
+                          <a href="#profile" className="block px-4 py-3 text-sm text-gray-700 hover:bg-lime-50 hover:text-lime-600">Profile Settings</a>
+                          <button
+                            onClick={handleLogout}
+                            className="block w-full text-left px-4 py-3 text-sm text-red-600 hover:bg-red-50"
+                          >
+                            Logout
+                          </button>
+                        </>
+                      ) : (
+                        <button
+                          onClick={() => setShowAuthModal(true)}
+                          className="block w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-lime-50 hover:text-lime-600"
+                        >
+                          Sign In / Create Account
+                        </button>
+                      )}
                     </div>
                   </div>
                 )}
               </div>
             </div>
 
-            {/* Mobile Right Section - User Icon + Menu Button */}
+            {/* Mobile Menu */}
             <div className="lg:hidden flex items-center space-x-3">
-              {/* Mobile User Menu Button */}
-              <div className="relative">
-                <button
-                  onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                  className="p-2 bg-gradient-to-r from-lime-500 to-emerald-600 text-white rounded-lg hover:from-lime-600 hover:to-emerald-700 transition-all duration-200 shadow-md"
-                >
-                  <User className="w-5 h-5" />
-                </button>
-
-                {/* Mobile User Dropdown */}
-                {isUserMenuOpen && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden z-50">
-                    <div className="py-2">
-                      <a 
-                        href="#signin" 
-                        className="block px-4 py-3 text-sm text-gray-700 hover:bg-lime-50 hover:text-lime-600 transition-colors duration-200"
-                        onClick={() => setIsUserMenuOpen(false)}
-                      >
-                        Sign In
-                      </a>
-                      <a 
-                        href="#signup" 
-                        className="block px-4 py-3 text-sm text-gray-700 hover:bg-lime-50 hover:text-lime-600 transition-colors duration-200"
-                        onClick={() => setIsUserMenuOpen(false)}
-                      >
-                        Create Account
-                      </a>
-                      <div className="border-t border-gray-100 my-1"></div>
-                      <a 
-                        href="#dashboard" 
-                        className="block px-4 py-3 text-sm text-gray-700 hover:bg-lime-50 hover:text-lime-600 transition-colors duration-200"
-                        onClick={() => setIsUserMenuOpen(false)}
-                      >
-                        My Bookings
-                      </a>
-                      <a 
-                        href="#profile" 
-                        className="block px-4 py-3 text-sm text-gray-700 hover:bg-lime-50 hover:text-lime-600 transition-colors duration-200"
-                        onClick={() => setIsUserMenuOpen(false)}
-                      >
-                        Profile Settings
-                      </a>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* Mobile Menu Button */}
               <button
-                onClick={() => setIsOpen(!isOpen)}
-                className="p-2 text-gray-700 hover:text-lime-600 focus:outline-none"
+                onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                className="p-2 bg-gradient-to-r from-lime-500 to-emerald-600 text-white rounded-lg"
               >
+                <User className="w-5 h-5" />
+              </button>
+              {isUserMenuOpen && (
+                <div className="absolute right-4 top-16 w-48 bg-white rounded-xl shadow-lg border border-gray-100 z-50">
+                  <div className="py-2">
+                    {user ? (
+                      <>
+                        <a href="#dashboard" className="block px-4 py-3 text-sm text-gray-700 hover:bg-lime-50 hover:text-lime-600">My Bookings</a>
+                        <a href="#profile" className="block px-4 py-3 text-sm text-gray-700 hover:bg-lime-50 hover:text-lime-600">Profile Settings</a>
+                        <button
+                          onClick={handleLogout}
+                          className="block w-full text-left px-4 py-3 text-sm text-red-600 hover:bg-red-50"
+                        >
+                          Logout
+                        </button>
+                      </>
+                    ) : (
+                      <button
+                        onClick={() => setShowAuthModal(true)}
+                        className="block w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-lime-50 hover:text-lime-600"
+                      >
+                        Sign In / Create Account
+                      </button>
+                    )}
+                  </div>
+                </div>
+              )}
+              <button onClick={() => setIsOpen(!isOpen)} className="p-2 text-gray-700 hover:text-lime-600">
                 {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
               </button>
             </div>
           </div>
         </nav>
 
-        {/* Mobile Navigation */}
         {isOpen && (
           <div className="lg:hidden bg-white/95 backdrop-blur-md border-t border-gray-100">
             <div className="px-4 py-6 space-y-4">
@@ -201,20 +204,18 @@ const Navbar: React.FC = () => {
                 <div key={index}>
                   <a
                     href={item.href}
-                    className="block py-3 text-lg font-medium text-gray-700 hover:text-lime-600 transition-colors duration-200"
+                    className="block py-3 text-lg font-medium text-gray-700 hover:text-lime-600"
                     onClick={() => setIsOpen(false)}
                   >
                     {item.name}
                   </a>
-                  
-                  {/* Mobile Fleet Submenu */}
                   {item.hasSubmenu && (
                     <div className="ml-4 mt-2 space-y-2">
                       {fleetCategories.map((category, idx) => (
                         <a
                           key={idx}
                           href={`#fleet-${category.name.toLowerCase().replace(/\s+/g, '-')}`}
-                          className="flex items-center py-2 text-sm text-gray-600 hover:text-lime-600 transition-colors duration-200"
+                          className="flex items-center py-2 text-sm text-gray-600 hover:text-lime-600"
                           onClick={() => setIsOpen(false)}
                         >
                           {category.icon}
@@ -225,24 +226,12 @@ const Navbar: React.FC = () => {
                   )}
                 </div>
               ))}
-              
-              {/* Mobile Contact Info */}
-              <div className="border-t border-gray-200 pt-4 space-y-3">
-                <div className="flex items-center space-x-3 text-gray-600">
-                  <Phone className="w-5 h-5" />
-                  <span>+254 700 123 456</span>
-                </div>
-                <div className="flex items-center space-x-3 text-gray-600">
-                  <MapPin className="w-5 h-5" />
-                  <span>Nairobi, Kenya</span>
-                </div>
-              </div>
             </div>
           </div>
         )}
       </header>
 
-      {/* Click outside to close dropdowns */}
+      {showAuthModal && <AuthModal onClose={() => setShowAuthModal(false)} />}
       {(isUserMenuOpen || isOpen) && (
         <div
           className="fixed inset-0 z-40"
