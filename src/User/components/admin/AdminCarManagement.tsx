@@ -1,98 +1,69 @@
-import { useState } from 'react'
-import type { FuelType, Transmission } from '../../../types'
+// src/pages/admin/AdminCarManagement.tsx
+import React, { useEffect, useState } from 'react';
 
-type CarFormData = {
-  make: string
-  model: string
-  year: number
-  category: string
-  pricePerHour: number
-  pricePerDay: number
-  fuel: FuelType
-  transmission: Transmission
-  capacity: number
-  location: string
-  availability: boolean
+interface Car {
+  id: number;
+  make: string;
+  model: string;
+  year: number;
+  location: string;
 }
 
-type Props = {
-  initialData?: CarFormData
-  onSubmit: (data: CarFormData) => void
-}
+const AdminCarManagement = () => {
+  const [cars, setCars] = useState<Car[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-export default function AdminCarManagement({ initialData, onSubmit }: Props) {
-  const [form, setForm] = useState<CarFormData>(
-    initialData || {
-      make: '',
-      model: '',
-      year: new Date().getFullYear(),
-      category: '',
-      pricePerHour: 0,
-      pricePerDay: 0,
-      fuel: 'petrol',
-      transmission: 'automatic',
-      capacity: 4,
-      location: '',
-      availability: true,
-    }
-  )
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value, type } = e.target
-
-    const updatedValue =
-      type === 'number'
-        ? Number(value)
-        : type === 'checkbox'
-          ? (e.target as HTMLInputElement).checked
-          : value
-
-    setForm(prev => ({
-      ...prev,
-      [name]: updatedValue,
-    }))
-  }
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    onSubmit(form)
-  }
+  useEffect(() => {
+    const fetchCars = async () => {
+      try {
+        const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
+        const res = await fetch(`${baseUrl}/cars`);
+        if (!res.ok) throw new Error('Failed to fetch cars');
+        const data = await res.json();
+        setCars(data);
+      } catch (err: any) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchCars();
+  }, []);
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input name="make" value={form.make} onChange={handleChange} placeholder="Make" />
-      <input name="model" value={form.model} onChange={handleChange} placeholder="Model" />
-      <input type="number" name="year" value={form.year} onChange={handleChange} />
-      <input name="category" value={form.category} onChange={handleChange} placeholder="Category" />
-      <input type="number" name="pricePerHour" value={form.pricePerHour} onChange={handleChange} />
-      <input type="number" name="pricePerDay" value={form.pricePerDay} onChange={handleChange} />
-      
-      <select name="fuel" value={form.fuel} onChange={handleChange}>
-        <option value="petrol">Petrol</option>
-        <option value="diesel">Diesel</option>
-        <option value="electric">Electric</option>
-        <option value="hybrid">Hybrid</option>
-      </select>
-      
-      <select name="transmission" value={form.transmission} onChange={handleChange}>
-        <option value="automatic">Automatic</option>
-        <option value="manual">Manual</option>
-      </select>
-      
-      <input type="number" name="capacity" value={form.capacity} onChange={handleChange} />
-      <input name="location" value={form.location} onChange={handleChange} placeholder="Location" />
-      
-      <label>
-        <input
-          type="checkbox"
-          name="availability"
-          checked={form.availability}
-          onChange={handleChange}
-        />
-        Available
-      </label>
+    <div className="p-6">
+      <h1 className="text-2xl font-bold mb-4">Car Inventory Management</h1>
+      {loading ? (
+        <p>Loading cars...</p>
+      ) : error ? (
+        <p className="text-red-600">{error}</p>
+      ) : (
+        <table className="w-full table-auto border">
+          <thead>
+            <tr className="bg-gray-100">
+              <th className="border px-4 py-2">ID</th>
+              <th className="border px-4 py-2">Make</th>
+              <th className="border px-4 py-2">Model</th>
+              <th className="border px-4 py-2">Year</th>
+              <th className="border px-4 py-2">Location</th>
+            </tr>
+          </thead>
+          <tbody>
+            {cars.map(car => (
+              <tr key={car.id}>
+                <td className="border px-4 py-2">{car.id}</td>
+                <td className="border px-4 py-2">{car.make}</td>
+                <td className="border px-4 py-2">{car.model}</td>
+                <td className="border px-4 py-2">{car.year}</td>
+                <td className="border px-4 py-2">{car.location}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+    </div>
+  );
+};
 
-      <button type="submit">Save Car</button>
-    </form>
-  )
-}
+export default AdminCarManagement;

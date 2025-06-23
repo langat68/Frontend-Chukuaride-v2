@@ -30,7 +30,6 @@ const LoginForm: React.FC = () => {
         throw new Error(data?.error || 'Login failed');
       }
 
-      // ✅ Expecting: { token, user }
       const { token, user } = data;
 
       if (!user?.id || !token) {
@@ -40,7 +39,17 @@ const LoginForm: React.FC = () => {
       localStorage.setItem('token', token);
       localStorage.setItem('user', JSON.stringify(user));
 
-      navigate('/user/dashboard');
+      // 🔁 Redirect based on role
+      switch (user.role) {
+        case 'admin':
+          navigate('/admin/dashboard');
+          break;
+        case 'staff':
+          navigate('/staff/dashboard');
+          break;
+        default:
+          navigate('/user/dashboard');
+      }
     } catch (err: any) {
       setError(err.message);
     } finally {

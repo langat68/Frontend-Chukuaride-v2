@@ -1,30 +1,67 @@
-import { useState } from 'react'
-import type { UserRole } from '../../../types'
 
-type Props = {
-  user: { id: number; name: string; email: string; role: UserRole }
-  onUpdate: (id: number, updates: { name: string; role: UserRole }) => void
+// src/pages/admin/AdminUserManagement.tsx
+import React, { useEffect, useState } from 'react';
+
+interface User {
+  id: number;
+  name: string;
+  email: string;
+  role: string;
 }
 
-export default function AdminUserManagement({ user, onUpdate }: Props) {
-  const [name, setName] = useState(user.name)
-  const [role, setRole] = useState<UserRole>(user.role)
+const AdminUserManagement = () => {
+  const [users, setUsers] = useState<User[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    onUpdate(user.id, { name, role })
-  }
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
+        const res = await fetch(`${baseUrl}/users`);
+        if (!res.ok) throw new Error('Failed to fetch users');
+        const data = await res.json();
+        setUsers(data);
+      } catch (err: any) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchUsers();
+  }, []);
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label>Email: {user.email}</label>
-      <input type="text" value={name} onChange={e => setName(e.target.value)} />
-      <select value={role} onChange={e => setRole(e.target.value as UserRole)}>
-        <option value="admin">Admin</option>
-        <option value="staff">Staff</option>
-        <option value="customer">Customer</option>
-      </select>
-      <button type="submit">Update User</button>
-    </form>
-  )
-}
+    <div className="p-6">
+      <h1 className="text-2xl font-bold mb-4">User Management</h1>
+      {loading ? (
+        <p>Loading users...</p>
+      ) : error ? (
+        <p className="text-red-600">{error}</p>
+      ) : (
+        <table className="w-full table-auto border">
+          <thead>
+            <tr className="bg-gray-100">
+              <th className="border px-4 py-2">ID</th>
+              <th className="border px-4 py-2">Name</th>
+              <th className="border px-4 py-2">Email</th>
+              <th className="border px-4 py-2">Role</th>
+            </tr>
+          </thead>
+          <tbody>
+            {users.map(user => (
+              <tr key={user.id}>
+                <td className="border px-4 py-2">{user.id}</td>
+                <td className="border px-4 py-2">{user.name}</td>
+                <td className="border px-4 py-2">{user.email}</td>
+                <td className="border px-4 py-2 capitalize">{user.role}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+    </div>
+  );
+};
+
+export default AdminUserManagement;
