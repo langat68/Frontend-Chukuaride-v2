@@ -8,15 +8,17 @@ import Fleet from './components/Fleet';
 import Testimonial from './components/Testimonial';
 import FAQ from './components/FAQ';
 import Footer from './components/Footer';
-import LoginForm from '././User/components/auth/LoginForm';
-import RegisterForm from '././User/components/auth/RegisterForm';
-import UserDashboard from '././User/components/user/UserDashboard';
+import LoginForm from './User/components/auth/LoginForm';
+import RegisterForm from './User/components/auth/RegisterForm';
+import UserDashboard from './User/components/user/UserDashboard';
 
 // Admin pages
-import AdminDashboard from '../../chukuaride/src/User/components/admin/AdminDashboard';
-import AdminUserManagement from '../../chukuaride/src/User/components/admin/AdminUserManagement';
-import AdminCarManagement from '../../chukuaride/src/User/components/admin/AdminCarManagement';
-import AdminBookingManagement from '../../chukuaride/src/User/components/admin/AdminBookingManagement';
+import AdminDashboard from './User/components/admin/AdminDashboard';
+import AdminUserManagement from './User/components/admin/AdminUserManagement';
+import AdminCarManagement from './User/components/admin/AdminCarManagement';
+import AdminBookingManagement from './User/components/admin/AdminBookingManagement';
+import AdminRentalManagement from './User/components/admin/AdminRentalManagement'; // ✅ Rentals
+import AdminPaymentManagement from './User/components/admin/AdminPaymentManagement'; // ✅ Payments
 
 import './App.css';
 
@@ -53,6 +55,8 @@ function App() {
         <Route path="/admin/users" element={<RequireAdmin><AdminUserManagement /></RequireAdmin>} />
         <Route path="/admin/cars" element={<RequireAdmin><AdminCarManagement /></RequireAdmin>} />
         <Route path="/admin/bookings" element={<RequireAdmin><AdminBookingManagement /></RequireAdmin>} />
+        <Route path="/admin/rentals" element={<RequireAdmin><AdminRentalManagement /></RequireAdmin>} />
+        <Route path="/admin/payments" element={<RequireAdmin><AdminPaymentManagement /></RequireAdmin>} /> {/* ✅ Added */}
       </Routes>
     </>
   );
