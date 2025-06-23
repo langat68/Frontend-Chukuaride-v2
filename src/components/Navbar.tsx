@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { User, Menu, X, Car, Phone, MapPin, ChevronDown } from 'lucide-react';
-import AuthModal from './AuthModal';
+import { useNavigate } from 'react-router-dom';
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [showAuthModal, setShowAuthModal] = useState(false);
-  const [user, setUser] = useState<null | { name: string; email: string }>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -16,34 +15,6 @@ const Navbar: React.FC = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (!token) return;
-
-    fetch('/api/auth/me', {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((res) => res.ok && res.json())
-      .then((data) => {
-        if (data && data.email && data.name) {
-          setUser({ name: data.name, email: data.email });
-        }
-      })
-      .catch(() => {
-        localStorage.removeItem('token');
-        setUser(null);
-      });
-  }, []);
-
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    setUser(null);
-    setIsUserMenuOpen(false);
-    window.location.reload();
-  };
 
   const navItems = [
     { name: 'Home', href: '#home' },
@@ -59,6 +30,11 @@ const Navbar: React.FC = () => {
     { name: 'SUVs & Trucks', icon: <Car className="w-4 h-4" /> },
     { name: 'Electric Cars', icon: <Car className="w-4 h-4" /> },
   ];
+
+  const handleLoginRedirect = () => {
+    setIsUserMenuOpen(false);
+    navigate('/login');
+  };
 
   return (
     <>
@@ -106,7 +82,7 @@ const Navbar: React.FC = () => {
               ))}
             </div>
 
-            {/* Contact Info & Account */}
+            {/* Contact Info & Login Button */}
             <div className="hidden lg:flex items-center space-x-6">
               <div className="flex items-center space-x-2 text-gray-600">
                 <Phone className="w-4 h-4" />
@@ -123,34 +99,19 @@ const Navbar: React.FC = () => {
                   className="flex items-center space-x-2 bg-gradient-to-r from-lime-500 to-emerald-600 text-white px-4 py-2 rounded-lg hover:from-lime-600 hover:to-emerald-700 shadow-md"
                 >
                   <User className="w-4 h-4" />
-                  <span className="font-medium">
-                    {user ? user.name : 'Account'}
-                  </span>
+                  <span className="font-medium">Account</span>
                   <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${isUserMenuOpen ? 'rotate-180' : ''}`} />
                 </button>
 
                 {isUserMenuOpen && (
                   <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100">
                     <div className="py-2">
-                      {user ? (
-                        <>
-                          <a href="#dashboard" className="block px-4 py-3 text-sm text-gray-700 hover:bg-lime-50 hover:text-lime-600">My Bookings</a>
-                          <a href="#profile" className="block px-4 py-3 text-sm text-gray-700 hover:bg-lime-50 hover:text-lime-600">Profile Settings</a>
-                          <button
-                            onClick={handleLogout}
-                            className="block w-full text-left px-4 py-3 text-sm text-red-600 hover:bg-red-50"
-                          >
-                            Logout
-                          </button>
-                        </>
-                      ) : (
-                        <button
-                          onClick={() => setShowAuthModal(true)}
-                          className="block w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-lime-50 hover:text-lime-600"
-                        >
-                          Sign In / Create Account
-                        </button>
-                      )}
+                      <button
+                        onClick={handleLoginRedirect}
+                        className="block w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-lime-50 hover:text-lime-600"
+                      >
+                        Sign In / Create Account
+                      </button>
                     </div>
                   </div>
                 )}
@@ -168,25 +129,12 @@ const Navbar: React.FC = () => {
               {isUserMenuOpen && (
                 <div className="absolute right-4 top-16 w-48 bg-white rounded-xl shadow-lg border border-gray-100 z-50">
                   <div className="py-2">
-                    {user ? (
-                      <>
-                        <a href="#dashboard" className="block px-4 py-3 text-sm text-gray-700 hover:bg-lime-50 hover:text-lime-600">My Bookings</a>
-                        <a href="#profile" className="block px-4 py-3 text-sm text-gray-700 hover:bg-lime-50 hover:text-lime-600">Profile Settings</a>
-                        <button
-                          onClick={handleLogout}
-                          className="block w-full text-left px-4 py-3 text-sm text-red-600 hover:bg-red-50"
-                        >
-                          Logout
-                        </button>
-                      </>
-                    ) : (
-                      <button
-                        onClick={() => setShowAuthModal(true)}
-                        className="block w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-lime-50 hover:text-lime-600"
-                      >
-                        Sign In / Create Account
-                      </button>
-                    )}
+                    <button
+                      onClick={handleLoginRedirect}
+                      className="block w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-lime-50 hover:text-lime-600"
+                    >
+                      Sign In / Create Account
+                    </button>
                   </div>
                 </div>
               )}
@@ -231,7 +179,7 @@ const Navbar: React.FC = () => {
         )}
       </header>
 
-      {showAuthModal && <AuthModal onClose={() => setShowAuthModal(false)} />}
+      {/* Click outside overlay */}
       {(isUserMenuOpen || isOpen) && (
         <div
           className="fixed inset-0 z-40"
