@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Eye, EyeOff } from 'lucide-react'; // if you're using lucide-react for icons
 
 const RegisterForm: React.FC = () => {
   const navigate = useNavigate();
@@ -7,6 +8,7 @@ const RegisterForm: React.FC = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false); // 👈 New state
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -29,7 +31,7 @@ const RegisterForm: React.FC = () => {
       }
 
       localStorage.setItem('token', data.token);
-      navigate('/dashboard'); // redirect after successful signup
+      navigate('/dashboard');
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -52,7 +54,7 @@ const RegisterForm: React.FC = () => {
               value={name}
               onChange={(e) => setName(e.target.value)}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-500"
-              placeholder="John Doe"
+              placeholder="your name"
             />
           </div>
 
@@ -65,21 +67,29 @@ const RegisterForm: React.FC = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-500"
-              placeholder="you@example.com"
+              placeholder="you@gmail.com"
             />
           </div>
 
-          <div>
+          <div className="relative">
             <label htmlFor="password" className="block text-gray-600 mb-1">Password</label>
             <input
               id="password"
-              type="password"
+              type={showPassword ? 'text' : 'password'}
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-500"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-500 pr-10"
               placeholder="••••••••"
             />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-9 text-gray-500 hover:text-gray-800 focus:outline-none"
+              tabIndex={-1}
+            >
+              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+            </button>
           </div>
 
           {error && <p className="text-red-600 text-sm">{error}</p>}
