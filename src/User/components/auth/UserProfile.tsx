@@ -3,13 +3,16 @@ import { useAppSelector } from '../../../Redux/store/hooks';
 import { selectUser } from '../../../Redux/store/selectors/authSelectors';
 import { User, Mail, Shield, Calendar, Edit3, Save, X } from 'lucide-react';
 
+// Define UserRole type
+type UserRole = 'admin' | 'staff' | 'customer';
+
 const UserProfile: React.FC = () => {
   const user = useAppSelector(selectUser);
   const [editing, setEditing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
-  // Form states for editing - only name can be edited based on your User type
+  // Form state for editing
   const [formData, setFormData] = useState({
     name: user?.name || '',
   });
@@ -36,11 +39,8 @@ const UserProfile: React.FC = () => {
   const handleSave = async () => {
     try {
       setError(null);
-      // Here you would dispatch an action to update the user profile
-      // For now, just simulate the update
       console.log('Updating profile with:', formData);
-      
-      // Simulate API call
+
       setSuccess('Profile updated successfully!');
       setEditing(false);
       setTimeout(() => setSuccess(null), 3000);
@@ -117,7 +117,7 @@ const UserProfile: React.FC = () => {
       )}
 
       <div className="grid lg:grid-cols-3 gap-8">
-        {/* Profile Picture Section */}
+        {/* Profile Picture */}
         <div className="lg:col-span-1">
           <div className="bg-white rounded-xl shadow-md p-6 text-center border">
             <div className="w-32 h-32 mx-auto mb-4 bg-lime-100 rounded-full flex items-center justify-center">
@@ -127,15 +127,12 @@ const UserProfile: React.FC = () => {
               {user.name || 'No name provided'}
             </h2>
             <p className="text-gray-500 mb-3">{user.email}</p>
-            
-            {/* Role Badge */}
             <div className="mb-4">
-              <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium ${getRoleColor(user.role)}`}>
+              <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium ${getRoleColor(user.role as UserRole)}`}>
                 <Shield size={14} />
                 {user.role?.charAt(0).toUpperCase() + user.role?.slice(1) || 'User'}
               </span>
             </div>
-
             <div className="flex items-center justify-center text-sm text-gray-500">
               <Calendar size={16} className="mr-2" />
               Joined {new Date(user.createdAt).toLocaleDateString()}
@@ -143,11 +140,11 @@ const UserProfile: React.FC = () => {
           </div>
         </div>
 
-        {/* Profile Details Section */}
+        {/* Details */}
         <div className="lg:col-span-2">
           <div className="bg-white rounded-xl shadow-md p-6 border">
             <h3 className="text-lg font-semibold text-emerald-700 mb-6">Personal Information</h3>
-            
+
             <div className="grid md:grid-cols-2 gap-6">
               {/* Name */}
               <div>
@@ -169,7 +166,7 @@ const UserProfile: React.FC = () => {
                 )}
               </div>
 
-              {/* Email (Read-only) */}
+              {/* Email */}
               <div>
                 <label className="block text-sm font-semibold text-gray-600 mb-2">
                   <Mail size={16} className="inline mr-1" />
@@ -179,7 +176,7 @@ const UserProfile: React.FC = () => {
                 <p className="text-xs text-gray-500 mt-1">Email cannot be changed</p>
               </div>
 
-              {/* Role (Read-only) */}
+              {/* Role */}
               <div>
                 <label className="block text-sm font-semibold text-gray-600 mb-2">
                   <Shield size={16} className="inline mr-1" />
@@ -188,7 +185,7 @@ const UserProfile: React.FC = () => {
                 <p className="text-gray-700 capitalize">{user.role}</p>
               </div>
 
-              {/* User ID */}
+              {/* ID */}
               <div>
                 <label className="block text-sm font-semibold text-gray-600 mb-2">
                   User ID
@@ -197,7 +194,7 @@ const UserProfile: React.FC = () => {
               </div>
             </div>
 
-            {/* Account Statistics */}
+            {/* Account Info */}
             <div className="mt-8 pt-6 border-t border-gray-200">
               <h4 className="text-md font-semibold text-gray-700 mb-4">Account Information</h4>
               <div className="grid md:grid-cols-3 gap-4 text-sm">

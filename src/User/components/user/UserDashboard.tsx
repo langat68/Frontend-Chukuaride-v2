@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import  { useState, useEffect } from 'react'
 import {
   User as UserIcon, Calendar, CreditCard, Star, HelpCircle, RefreshCw
 } from 'lucide-react'
