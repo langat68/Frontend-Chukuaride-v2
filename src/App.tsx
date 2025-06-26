@@ -1,6 +1,7 @@
 import React from 'react';
 import type { ReactNode } from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
+
 import Navbar from './components/Navbar';
 import Hero from './components/hero';
 import HowItWorks from './components/Howitworks';
@@ -17,8 +18,8 @@ import AdminDashboard from './User/components/admin/AdminDashboard';
 import AdminUserManagement from './User/components/admin/AdminUserManagement';
 import AdminCarManagement from './User/components/admin/AdminCarManagement';
 import AdminBookingManagement from './User/components/admin/AdminBookingManagement';
-import AdminRentalManagement from './User/components/admin/AdminRentalManagement'; // ✅ Rentals
-import AdminPaymentManagement from './User/components/admin/AdminPaymentManagement'; // ✅ Payments
+import AdminRentalManagement from './User/components/admin/AdminRentalManagement';
+import AdminPaymentManagement from './User/components/admin/AdminPaymentManagement';
 
 import './App.css';
 
@@ -41,9 +42,25 @@ const RequireAdmin = ({ children }: { children: ReactNode }) => {
 };
 
 function App() {
+  const location = useLocation();
+
+  const hideNavbarOnRoutes = [
+    '/admin/dashboard',
+    '/admin/users',
+    '/admin/cars',
+    '/admin/bookings',
+    '/admin/rentals',
+    '/admin/payments',
+    '/user/dashboard',
+  ];
+
+  const shouldHideNavbar = hideNavbarOnRoutes.some((route) =>
+    location.pathname.startsWith(route)
+  );
+
   return (
     <>
-      <Navbar />
+      {!shouldHideNavbar && <Navbar />}
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginForm />} />
@@ -51,12 +68,30 @@ function App() {
         <Route path="/user/dashboard" element={<UserDashboard />} />
 
         {/* Admin Routes */}
-        <Route path="/admin/dashboard" element={<RequireAdmin><AdminDashboard /></RequireAdmin>} />
-        <Route path="/admin/users" element={<RequireAdmin><AdminUserManagement /></RequireAdmin>} />
-        <Route path="/admin/cars" element={<RequireAdmin><AdminCarManagement /></RequireAdmin>} />
-        <Route path="/admin/bookings" element={<RequireAdmin><AdminBookingManagement /></RequireAdmin>} />
-        <Route path="/admin/rentals" element={<RequireAdmin><AdminRentalManagement /></RequireAdmin>} />
-        <Route path="/admin/payments" element={<RequireAdmin><AdminPaymentManagement /></RequireAdmin>} /> {/* ✅ Added */}
+        <Route
+          path="/admin/dashboard"
+          element={<RequireAdmin><AdminDashboard /></RequireAdmin>}
+        />
+        <Route
+          path="/admin/users"
+          element={<RequireAdmin><AdminUserManagement /></RequireAdmin>}
+        />
+        <Route
+          path="/admin/cars"
+          element={<RequireAdmin><AdminCarManagement /></RequireAdmin>}
+        />
+        <Route
+          path="/admin/bookings"
+          element={<RequireAdmin><AdminBookingManagement /></RequireAdmin>}
+        />
+        <Route
+          path="/admin/rentals"
+          element={<RequireAdmin><AdminRentalManagement /></RequireAdmin>}
+        />
+        <Route
+          path="/admin/payments"
+          element={<RequireAdmin><AdminPaymentManagement /></RequireAdmin>}
+        />
       </Routes>
     </>
   );

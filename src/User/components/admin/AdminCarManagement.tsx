@@ -1,4 +1,3 @@
-// src/pages/admin/AdminCarManagement.tsx
 import React, { useEffect, useState } from 'react';
 
 interface Car {
@@ -33,35 +32,45 @@ const AdminCarManagement = () => {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Car Inventory Management</h1>
-      {loading ? (
-        <p>Loading cars...</p>
-      ) : error ? (
-        <p className="text-red-600">{error}</p>
-      ) : (
-        <table className="w-full table-auto border">
-          <thead>
-            <tr className="bg-gray-100">
-              <th className="border px-4 py-2">ID</th>
-              <th className="border px-4 py-2">Make</th>
-              <th className="border px-4 py-2">Model</th>
-              <th className="border px-4 py-2">Year</th>
-              <th className="border px-4 py-2">Location</th>
-            </tr>
-          </thead>
-          <tbody>
-            {cars.map(car => (
-              <tr key={car.id}>
-                <td className="border px-4 py-2">{car.id}</td>
-                <td className="border px-4 py-2">{car.make}</td>
-                <td className="border px-4 py-2">{car.model}</td>
-                <td className="border px-4 py-2">{car.year}</td>
-                <td className="border px-4 py-2">{car.location}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
+      <div className="bg-white rounded-2xl shadow-md p-6">
+        <h1 className="text-2xl font-bold mb-6 text-gray-800">Car Inventory Management</h1>
+
+        {loading ? (
+          <div className="text-center py-10 text-gray-500">Loading cars...</div>
+        ) : error ? (
+          <div className="text-center py-10 text-red-600 font-medium">{error}</div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="min-w-full table-auto border-collapse">
+              <thead className="bg-gray-100 text-gray-700">
+                <tr>
+                  <th className="text-left px-6 py-3 font-semibold">ID</th>
+                  <th className="text-left px-6 py-3 font-semibold">Make</th>
+                  <th className="text-left px-6 py-3 font-semibold">Model</th>
+                  <th className="text-left px-6 py-3 font-semibold">Year</th>
+                  <th className="text-left px-6 py-3 font-semibold">Location</th>
+                </tr>
+              </thead>
+              <tbody>
+                {cars.map((car, index) => (
+                  <tr
+                    key={car.id}
+                    className={`${
+                      index % 2 === 0 ? 'bg-white' : 'bg-gray-50'
+                    } hover:bg-gray-100 transition duration-150`}
+                  >
+                    <td className="px-6 py-4">{car.id}</td>
+                    <td className="px-6 py-4">{car.make}</td>
+                    <td className="px-6 py-4">{car.model}</td>
+                    <td className="px-6 py-4">{car.year}</td>
+                    <td className="px-6 py-4">{car.location}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
