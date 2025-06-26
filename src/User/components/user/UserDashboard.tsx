@@ -65,7 +65,7 @@ export default function UserDashboard() {
     }
   })
 
-  const [active, setActive] = useState('')
+  const [active, setActive] = useState('rentals')
   const [data, setData] = useState<any[]>([])
   const [loading, setLoading] = useState(false)
   const [bookingCount, setBookingCount] = useState(0)
@@ -82,7 +82,6 @@ export default function UserDashboard() {
       const result = await res.json()
       setData(result)
 
-      // update counts
       if (type === 'bookings') setBookingCount(result.length)
       if (type === 'rentals') setRentalCount(result.length)
       if (type === 'payments') {
@@ -100,6 +99,12 @@ export default function UserDashboard() {
       setLoading(false)
     }
   }
+
+  useEffect(() => {
+    if (user) {
+      fetchData('rentals')
+    }
+  }, [user])
 
   const getStatusColor = (status?: string) => {
     const s = status?.toLowerCase?.()
