@@ -1,4 +1,3 @@
-
 import type { ReactNode } from 'react';
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 
@@ -22,6 +21,35 @@ import AdminRentalManagement from './User/components/admin/AdminRentalManagement
 import AdminPaymentManagement from './User/components/admin/AdminPaymentManagement';
 
 import './App.css';
+
+// Dummy data that matches the expected DashboardData type
+const dummyDashboardData = {
+  bookings: {
+    active: 12,
+    today: 3,
+  },
+  rentals: {
+    ongoing: 5,
+    overdue: 1,
+  },
+  payments: {
+    monthly: 12000,
+    total: 155000,
+  },
+  users: {
+    total: 300,
+    active: 240,
+  },
+  cars: {
+    available: 45,
+    rented: 15,
+  },
+  metrics: {
+    completionRate: '94%',
+    utilization: '78%',
+    paymentSuccess: '98%',
+  },
+};
 
 function HomePage() {
   return (
@@ -70,27 +98,51 @@ function App() {
         {/* Admin Routes */}
         <Route
           path="/admin/dashboard"
-          element={<RequireAdmin><AdminDashboard /></RequireAdmin>}
+          element={
+            <RequireAdmin>
+              <AdminDashboard dashboardData={dummyDashboardData} />
+            </RequireAdmin>
+          }
         />
         <Route
           path="/admin/users"
-          element={<RequireAdmin><AdminUserManagement /></RequireAdmin>}
+          element={
+            <RequireAdmin>
+              <AdminUserManagement />
+            </RequireAdmin>
+          }
         />
         <Route
           path="/admin/cars"
-          element={<RequireAdmin><AdminCarManagement /></RequireAdmin>}
+          element={
+            <RequireAdmin>
+              <AdminCarManagement />
+            </RequireAdmin>
+          }
         />
         <Route
           path="/admin/bookings"
-          element={<RequireAdmin><AdminBookingManagement /></RequireAdmin>}
+          element={
+            <RequireAdmin>
+              <AdminBookingManagement />
+            </RequireAdmin>
+          }
         />
         <Route
           path="/admin/rentals"
-          element={<RequireAdmin><AdminRentalManagement /></RequireAdmin>}
+          element={
+            <RequireAdmin>
+              <AdminRentalManagement />
+            </RequireAdmin>
+          }
         />
         <Route
           path="/admin/payments"
-          element={<RequireAdmin><AdminPaymentManagement /></RequireAdmin>}
+          element={
+            <RequireAdmin>
+              <AdminPaymentManagement />
+            </RequireAdmin>
+          }
         />
       </Routes>
     </>

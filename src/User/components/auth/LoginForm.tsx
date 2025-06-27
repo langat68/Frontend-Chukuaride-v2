@@ -14,7 +14,7 @@ const LoginForm: React.FC = () => {
     setLoading(true);
 
     try {
-      const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
+      const baseUrl = import.meta.env.VITE_API_BASE_URL || 'https://chukuaride3.onrender.com';
 
       const res = await fetch(`${baseUrl}/auth/login`, {
         method: 'POST',
