@@ -27,7 +27,7 @@ const AdminRentalManagement = () => {
   useEffect(() => {
     const fetchRentals = async () => {
       try {
-        const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
+        const baseUrl = import.meta.env.VITE_API_BASE_URL || 'https://chukuaride3.onrender.com';
         const res = await fetch(`${baseUrl}/rentals`);
         if (!res.ok) throw new Error('Failed to fetch rentals');
         const data = await res.json();
