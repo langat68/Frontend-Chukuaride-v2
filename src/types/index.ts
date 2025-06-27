@@ -51,6 +51,7 @@ export interface Car {
   location: string
   createdBy: number
   createdAt: string
+  
     images: CarImage[];
 }
 
