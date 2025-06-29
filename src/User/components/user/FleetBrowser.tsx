@@ -1,6 +1,6 @@
 // src/pages/FleetBrowser.tsx
 import React, { useEffect, useState } from 'react'
-import BookCarModal from './BookCarModal' // ✅ Update path if needed
+import BookCarModal from './BookCarModal'
 
 interface Car {
   id: number
@@ -19,6 +19,15 @@ interface Car {
 const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000'
 
 const FleetBrowser: React.FC = () => {
+  const [user] = useState(() => {
+    try {
+      const stored = localStorage.getItem('user')
+      return stored ? JSON.parse(stored) : null
+    } catch {
+      return null
+    }
+  })
+
   const [cars, setCars] = useState<Car[]>([])
   const [loading, setLoading] = useState(true)
   const [selectedCar, setSelectedCar] = useState<Car | null>(null)
@@ -49,10 +58,16 @@ const FleetBrowser: React.FC = () => {
   )
 
   const handleBookClick = (car: Car) => {
+    if (!user) {
+      alert('Please log in to book a car.')
+      return
+    }
+
     if (!car.available) {
       alert('This car is currently unavailable')
       return
     }
+
     setSelectedCar(car)
   }
 
@@ -148,6 +163,7 @@ const FleetBrowser: React.FC = () => {
           carId={selectedCar.id}
           carName={`${selectedCar.make} ${selectedCar.model}`}
           carPrice={selectedCar.pricePerDay}
+          user={user}
           onClose={() => setSelectedCar(null)}
         />
       )}
@@ -157,7 +173,7 @@ const FleetBrowser: React.FC = () => {
 
 const CarCard: React.FC<{ car: Car, onBookClick: () => void }> = ({ car, onBookClick }) => {
   const defaultImage = "https://images.unsplash.com/photo-1549924231-f129b911e442?w=400&h=250&fit=crop"
-  
+
   return (
     <div className="bg-white rounded-lg shadow-sm border overflow-hidden hover:shadow-md transition-shadow">
       <div className="relative">
