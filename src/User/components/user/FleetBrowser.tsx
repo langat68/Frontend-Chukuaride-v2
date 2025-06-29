@@ -16,7 +16,7 @@ interface Car {
   imageUrl?: string
 }
 
-const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000'
+const baseUrl = import.meta.env.VITE_API_BASE_URL || 'https://chukuaride3.onrender.com'
 
 const FleetBrowser: React.FC = () => {
   const [user] = useState(() => {

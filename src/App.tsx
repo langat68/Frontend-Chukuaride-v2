@@ -22,35 +22,42 @@ import AdminPaymentManagement from './User/components/admin/AdminPaymentManageme
 
 import './App.css';
 
-// Dummy data that matches the expected DashboardData type
-const dummyDashboardData = {
-  bookings: {
-    active: 12,
-    today: 3,
-  },
-  rentals: {
-    ongoing: 5,
-    overdue: 1,
-  },
-  payments: {
-    monthly: 12000,
-    total: 155000,
-  },
-  users: {
-    total: 300,
-    active: 240,
-  },
-  cars: {
-    available: 45,
-    rented: 15,
-  },
-  metrics: {
-    completionRate: '94%',
-    utilization: '78%',
-    paymentSuccess: '98%',
-  },
+// ====================
+// Types and Utils
+// ====================
+type UserRole = 'admin' | 'customer' | 'staff';
+
+interface StoredUser {
+  id: number;
+  name?: string;
+  email: string;
+  role: UserRole;
+}
+
+const getStoredUser = (): StoredUser | null => {
+  try {
+    return JSON.parse(localStorage.getItem('user') || 'null');
+  } catch {
+    return null;
+  }
 };
 
+// ====================
+// Protected Routes
+// ====================
+const RequireAdmin = ({ children }: { children: ReactNode }) => {
+  const user = getStoredUser();
+  return user?.role === 'admin' ? children : <Navigate to="/" />;
+};
+
+const RequireAuth = ({ children }: { children: ReactNode }) => {
+  const user = getStoredUser();
+  return user ? children : <Navigate to="/login" />;
+};
+
+// ====================
+// Public Home
+// ====================
 function HomePage() {
   return (
     <>
@@ -64,11 +71,9 @@ function HomePage() {
   );
 }
 
-const RequireAdmin = ({ children }: { children: ReactNode }) => {
-  const user = JSON.parse(localStorage.getItem('user') || '{}');
-  return user?.role === 'admin' ? children : <Navigate to="/" />;
-};
-
+// ====================
+// Main App Component
+// ====================
 function App() {
   const location = useLocation();
 
@@ -86,6 +91,19 @@ function App() {
     location.pathname.startsWith(route)
   );
 
+  const dummyDashboardData = {
+    bookings: { active: 12, today: 3 },
+    rentals: { ongoing: 5, overdue: 1 },
+    payments: { monthly: 12000, total: 155000 },
+    users: { total: 300, active: 240 },
+    cars: { available: 45, rented: 15 },
+    metrics: {
+      completionRate: '94%',
+      utilization: '78%',
+      paymentSuccess: '98%',
+    },
+  };
+
   return (
     <>
       {!shouldHideNavbar && <Navbar />}
@@ -93,7 +111,16 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginForm />} />
         <Route path="/signup" element={<RegisterForm />} />
-        <Route path="/user/dashboard" element={<UserDashboard />} />
+
+        {/* Protected User Route */}
+        <Route
+          path="/user/dashboard"
+          element={
+            <RequireAuth>
+              <UserDashboard />
+            </RequireAuth>
+          }
+        />
 
         {/* Admin Routes */}
         <Route

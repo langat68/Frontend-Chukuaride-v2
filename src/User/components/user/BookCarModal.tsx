@@ -8,7 +8,7 @@ interface Props {
   onClose: () => void
 }
 
-const baseUrl = 'http://localhost:3000'
+const baseUrl = 'https://chukuaride3.onrender.com'
 
 const BookCarModal: React.FC<Props> = ({ carId, carName, carPrice, user, onClose }) => {
   const [pickupTime, setPickupTime] = useState('')
